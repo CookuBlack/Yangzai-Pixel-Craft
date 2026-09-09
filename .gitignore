@@ -22,7 +22,9 @@ gpu_wm.log
 /dlss/
 /third_party/
 
-# ---- 编辑器 ----
+# ---- 本地工具/编辑器目录（不纳入仓库）----
+.workbuddy/
+.trae/
 .idea/
 .vscode/
 *.swp
