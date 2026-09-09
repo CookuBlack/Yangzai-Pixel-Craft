@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>羊仔像素工艺 · Yangzai Pixel Craft</title>
+  <link rel="icon" href="/ui/logo.png" />
+  <link rel="stylesheet" href="/ui/styles.css?v=82" />
+</head>
+<body>
+  <!-- ===== 统一 SVG 图标库（Lucide 风格：线性描边 / currentColor 继承主题色） ===== -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+    <defs>
+      <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/></symbol>
+      <symbol id="i-film" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 4v16M17 4v16M2 9h5M2 15h5M17 9h5M17 15h5"/></symbol>
+      <symbol id="i-tpl" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></symbol>
+      <symbol id="i-tag" viewBox="0 0 24 24"><path d="M12.59 2.59A2 2 0 0 0 11.17 2H4a2 2 0 0 0-2 2v7.17a2 2 0 0 0 .59 1.42l8.7 8.7a2.43 2.43 0 0 0 3.42 0l6.58-6.58a2.43 2.43 0 0 0 0-3.42Z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></symbol>
+      <symbol id="i-zap" viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></symbol>
+      <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></symbol>
+      <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></symbol>
+      <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+      <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/></symbol>
+      <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></symbol>
+      <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M10 11v6M14 11v6"/></symbol>
+      <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></symbol>
+      <symbol id="i-upload" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/></symbol>
+      <symbol id="i-ffwd" viewBox="0 0 24 24"><polygon points="13 19 22 12 13 5 13 19"/><polygon points="2 19 11 12 2 5 2 19"/></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+      <symbol id="i-folder" viewBox="0 0 24 24"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></symbol>
+      <symbol id="i-save" viewBox="0 0 24 24"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></symbol>
+      <symbol id="i-copy" viewBox="0 0 24 24"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></symbol>
+      <symbol id="i-box" viewBox="0 0 24 24"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"/><path d="M12 22V12"/><path d="m3.3 7 8.7 5 8.7-5"/></symbol>
+      <symbol id="i-history" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></symbol>
+      <symbol id="i-eraser" viewBox="0 0 24 24"><path d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21"/><path d="M22 21H7"/><path d="m5 11 9 9"/></symbol>
+      <symbol id="i-warn" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4M12 17h.01"/></symbol>
+      <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></symbol>
+      <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+      <symbol id="i-edit" viewBox="0 0 24 24"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></symbol>
+      <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></symbol>
+      <symbol id="i-inbox" viewBox="0 0 24 24"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></symbol>
+      <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M9.9 2.6l1.5 3.4a1 1 0 0 0 .5.5l3.4 1.5a1 1 0 0 1 0 1.8l-3.4 1.5a1 1 0 0 0-.5.5l-1.5 3.4a1 1 0 0 1-1.8 0l-1.5-3.4a1 1 0 0 0-.5-.5L2.7 9.8a1 1 0 0 1 0-1.8l3.4-1.5a1 1 0 0 0 .5-.5l1.5-3.4a1 1 0 0 1 1.8 0Z"/><path d="M20 3v4M22 5h-4"/></symbol>
+      <symbol id="i-maximize" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></symbol>
+      <symbol id="i-minimize" viewBox="0 0 24 24"><path d="M8 3v3a2 2 0 0 1-2 2H3"/><path d="M21 8h-3a2 2 0 0 1-2-2V3"/><path d="M3 16h3a2 2 0 0 1 2 2v3"/><path d="M16 21v-3a2 2 0 0 1 2-2h3"/></symbol>
+      <symbol id="i-play" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"/></symbol>
+      <symbol id="i-pause" viewBox="0 0 24 24"><rect x="14" y="4" width="4" height="16" rx="1"/><rect x="6" y="4" width="4" height="16" rx="1"/></symbol>
+      <symbol id="i-hourglass" viewBox="0 0 24 24"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></symbol>
+    </defs>
+  </svg>
+  <!-- 动态背景 -->
+  <div class="aurora"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo-box">
+        <img class="logo-img" src="/ui/logo.png" alt="羊仔像素工艺" />
+      </div>
+      <div>
+        <h1>羊仔像素工艺</h1>
+        <p class="sub">Yangzai Pixel Craft · 图片 / 视频 · 本地上传 · 批量处理</p>
+      </div>
+    </div>
+    <span id="engineBadge" class="badge">引擎检测中…</span>
+  </header>
+
+  <main class="layout">
+    <!-- ===== 左侧一级导航（左侧对齐 + 垂直居中） ===== -->
+    <aside class="sidebar">
+      <nav class="snav">
+        <button class="snav-item active" data-view="image">
+          <span class="snav-ico"><svg class="ico"><use href="#i-image"/></svg></span><span>图片去水印</span>
+        </button>
+        <button class="snav-item" data-view="video">
+          <span class="snav-ico"><svg class="ico"><use href="#i-film"/></svg></span><span>视频去水印</span>
+        </button>
+        <button class="snav-item" data-view="templates">
+          <span class="snav-ico"><svg class="ico"><use href="#i-tpl"/></svg></span><span>我的模板</span>
+        </button>
+        <button class="snav-item" data-view="wm">
+          <span class="snav-ico"><svg class="ico"><use href="#i-tag"/></svg></span><span>盲水印</span>
+        </button>
+        <button class="snav-item" data-view="dlss">
+          <span class="snav-ico"><svg class="ico"><use href="#i-zap"/></svg></span><span>DLSS 增强</span>
+        </button>
+      </nav>
+      <nav class="snav snav-bottom">
+        <button class="snav-item" id="settingsBtn" title="设置">
+          <span class="snav-ico"><svg class="ico"><use href="#i-gear"/></svg></span><span>设置</span>
+        </button>
+        <button class="snav-item" id="themeBtn" title="切换到白天模式">
+          <span class="snav-ico" id="themeIcon"><svg class="ico"><use href="#i-moon"/></svg></span><span>黑夜模式</span>
+        </button>
+      </nav>
+    </aside>
+
+    <!-- ===== 右侧内容 ===== -->
+    <div class="content">
+      <!-- 一个铺满右侧的矩形工作区：流程居中放在框内，里面放置 单个/批量 两个按钮与内容 -->
+      <div class="workspace">
+        <ol class="steps">
+          <li class="active"><span class="step-num">1</span><span class="step-label">载入文件</span></li>
+          <div class="line"></div>
+          <li id="step2"><span class="step-num">2</span><span class="step-label">框选水印</span></li>
+          <div class="line"></div>
+          <li id="step3"><span class="step-num">3</span><span class="step-label">处理下载</span></li>
+        </ol>
+
+        <div class="subbar" id="subbar">
+          <button class="sub active" data-sub="single"><span class="sub-ico"><svg class="ico"><use href="#i-target"/></svg></span><span>单个处理</span></button>
+          <button class="sub" data-sub="batch"><span class="sub-ico"><svg class="ico"><use href="#i-layers"/></svg></span><span>批量处理</span></button>
+        </div>
+
+        <!-- ============ 单个处理编辑区：左=媒体，右=参数 ============ -->
+        <section class="view-section" id="single-editor">
+          <label class="field-label" id="uploadLabel">第一步 · 上传图片</label>
+
+          <div class="editor-grid">
+            <!-- 左：加载 / 播放媒体 -->
+            <div class="editor-media">
+              <label class="dropzone" id="dropzone">
+                <input id="fileInput" type="file" accept="image/*" hidden />
+                <span class="dz-icon" id="dzIcon"><svg class="ico"><use href="#i-image"/></svg></span>
+                <span class="dz-title" id="dzTitle">点击或拖拽文件到此处</span>
+                <small id="dzSub">支持 jpg / png / webp 等常见格式</small>
+              </label>
+
+              <div class="media-loading hidden" id="mediaLoading">
+                <span class="spinner lg"></span>
+                <span class="mloading-txt" id="mediaLoadingTxt">正在上传并检测水印…</span>
+              </div>
+
+              <div class="card hidden" id="stageCard" style="margin-top:16px">
+                <div class="stage-bar">
+                  <span class="stage-file" id="mediaNameEl">已加载文件</span>
+                  <button class="btn small outline" id="swapBtn" title="重新选择图片/视频"><svg class="ico"><use href="#i-refresh"/></svg> 更换文件</button>
+                </div>
+                <div class="pv-center">
+                  <div class="preview-wrap" id="previewWrap">
+                    <video id="srcVideo" class="media-el hidden" playsinline muted preload="metadata"></video>
+                    <img id="srcImg" class="media-el hidden" alt="预览" />
+                    <div class="boxes-layer" id="boxesLayer"></div>
+                  </div>
+                </div>
+                <div class="timeline hidden" id="timeline">
+                  <button class="tl-play" id="playBtn" title="播放/暂停"><svg class="ico"><use href="#i-play"/></svg></button>
+                  <span class="tl-time" id="curTime">0:00</span>
+                  <input type="range" id="seekBar" class="seek" min="0" max="100" value="0" step="0.05" />
+                  <span class="tl-time" id="durTime">0:00</span>
+                  <button class="tl-fs" id="fsBtn" title="全屏查看"><svg class="ico"><use href="#i-maximize"/></svg></button>
+                </div>
+                <div class="segbar hidden" id="segBar" title="可选择只对某个时间片段去水印，未选部分保持原样">
+                  <label class="seg-toggle"><input type="checkbox" id="segToggle" /> <span>只处理选中片段</span></label>
+                  <span class="seg-cap" id="segStartCap">0:00</span>
+                  <div class="seg-track">
+                    <div class="seg-fill" id="segFill"></div>
+                    <input type="range" id="segStart" class="seg-b" min="0" value="0" step="0.1" disabled />
+                    <input type="range" id="segEnd" class="seg-a" min="0" value="0" step="0.1" disabled />
+                  </div>
+                  <span class="seg-cap" id="segEndCap">0:00</span>
+                  <button type="button" class="btn small ghost" id="segReset">全片</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 右：参数调整 -->
+            <aside class="editor-side">
+              <div class="side-head">
+                <h2>框选水印区域</h2>
+                <button class="btn small ghost" id="clearBtn"><svg class="ico"><use href="#i-trash"/></svg> 清空全部</button>
+              </div>
+              <p class="card-hint">拖动方框<b>移动</b>，拖动<b>任意边框/角点</b>调整大小，支持多个水印框；也可重新拖拽新文件替换到左侧预览。</p>
+
+              <div class="options">
+                <div class="opt">
+                  <label>引擎</label>
+                  <select id="engineSel">
+                    <option value="auto">自动（AI 优先）</option>
+                    <option value="ai">AI · LaMa</option>
+                    <option value="mat">AI · MAT（人像更佳）</option>
+                    <option value="propainter">ProPainter（人物保持佳）</option>
+                    <option value="opencv">快速 · OpenCV</option>
+                  </select>
+                </div>
+                <div class="opt hidden" id="qualityBox">
+                  <label>画质<span class="hint" data-hint="视频编码质量：Max 最佳但文件大，Good 更小，Auto 自动平衡。"><svg class="ico"><use href="#i-info"/></svg></span></label>
+                  <select id="qualitySel">
+                    <option value="fast">快速</option>
+                    <option value="best" selected>高保真</option>
+                    <option value="lossless">无损</option>
+                  </select>
+                </div>
+                <button class="btn" id="addBoxBtn"><svg class="ico"><use href="#i-plus"/></svg> 添加水印框</button>
+                <button class="btn" id="autoBtn"><span class="spinner"></span><span class="btn-txt"><svg class="ico"><use href="#i-sparkle"/></svg> 自动检测</span></button>
+              </div>
+
+              <div class="box-list hidden" id="boxList">
+                <span class="box-list-title">水印框</span>
+                <div class="box-tags" id="boxTags"></div>
+              </div>
+
+              <section class="tpl-card" id="tplCardSingle">
+                <header class="tpl-card__head">
+                  <h3><svg class="ico"><use href="#i-tpl"/></svg> 模板</h3>
+                  <span class="tpl-card__sub">一键套用已有遮罩，或保存当前框选</span>
+                </header>
+
+                <div class="tpl-card__body">
+                  <!-- 分组一：选择模板 + 预览 -->
+                  <div class="tpl-group">
+                    <div class="tpl-group__head">
+                      <label for="tplSelSingle">选择模板</label>
+                      <span class="tpl-group__info" id="tplSelInfo">未选择</span>
+                    </div>
+                    <div class="tpl-apply-row">
+                      <select id="tplSelSingle" class="tpl-apply-row__select">
+                        <option value="">选择模板…</option>
+                      </select>
+                      <button class="btn tpl-apply-row__btn" id="applyTplBtn">应用</button>
+                    </div>
+                    <!-- 选中模板的遮罩预览 -->
+                    <div class="tpl-preview" id="tplPreviewWrap" hidden>
+                      <div class="tpl-preview__label">遮罩预览</div>
+                      <div class="tpl-preview__frame" id="tplPreviewFrame"></div>
+                    </div>
+                  </div>
+
+                  <!-- 分组二：保存为新模板 -->
+                  <div class="tpl-group">
+                    <div class="tpl-group__head">
+                      <label for="tplName">保存为新模板</label>
+                    </div>
+                    <div class="tpl-save-row">
+                      <input id="tplName" type="text" class="tpl-save-row__input" placeholder="如：右下角水印" />
+                      <button class="btn primary tpl-save-row__btn" id="saveTplBtn"><svg class="ico"><use href="#i-save"/></svg> 保存</button>
+                    </div>
+                    <p class="tpl-save-msg" id="saveTplMsg"></p>
+                  </div>
+                </div>
+              </section>
+
+              <div class="run-row">
+                <button class="btn primary big" id="startBtn"><span class="spinner"></span><span class="btn-txt">开始去除水印</span></button>
+              </div>
+              <p class="hint" id="aiHint"></p>
+            </aside>
+          </div>
+
+          <div class="card hidden" id="progressCard">
+            <h2 id="progressTitle">处理中…</h2>
+            <div class="progress"><div class="bar" id="progressBar"></div></div>
+            <p class="status-msg" id="statusMsg">准备中…</p>
+          </div>
+
+          <div class="card hidden" id="resultCard">
+            <h2><svg class="ico"><use href="#i-check"/></svg> 处理完成 · 效果预览</h2>
+            <p class="card-hint">查看修复效果，满意后下载。</p>
+            <div class="pv-center">
+              <video id="resultVideo" class="result-video hidden" controls playsinline></video>
+              <img id="resultImg" class="result-img hidden" alt="结果" />
+            </div>
+            <div class="options">
+              <a class="btn primary" id="downloadBtn" href="#"><svg class="ico"><use href="#i-download"/></svg> 下载结果</a>
+              <button class="btn" id="againBtn">↻ 再处理一个</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ 批量处理区 ============ -->
+        <section class="view-section hidden" id="batch-panel">
+          <label class="field-label">选择多个文件 或 直接选择一个文件夹</label>
+          <div class="batch-pick">
+            <label class="dropzone" id="batchDrop">
+              <input id="batchInput" type="file" accept="image/*" multiple hidden />
+              <span class="dz-icon"><svg class="ico"><use href="#i-folder"/></svg></span>
+              <span class="dz-title">点击选择文件（可多选）</span>
+              <small id="batchSub">支持多选，或拖拽文件到此处</small>
+            </label>
+            <input id="batchFolderInput" type="file" webkitdirectory directory multiple hidden />
+            <button class="btn" id="folderBtn"><span class="folder-ico"><svg class="ico"><use href="#i-folder"/></svg></span> 选择文件夹</button>
+          </div>
+          <ul class="file-list hidden" id="batchFileList"></ul>
+
+          <!-- 逐项预览：点击素材后在此预览并框选/套模板 -->
+          <div class="card hidden" id="batchPreviewCard" style="margin-top:16px">
+            <div class="stage-bar">
+              <span class="stage-file" id="batchPreviewName">素材预览</span>
+            </div>
+            <div class="pv-center">
+              <div class="preview-wrap" id="batchPreviewWrap">
+                <video id="batchPreviewVideo" class="media-el hidden" controls playsinline muted preload="metadata"></video>
+                <img id="batchPreviewImg" class="media-el hidden" alt="预览" />
+                <div class="boxes-layer" id="batchPreviewLayer"></div>
+              </div>
+            </div>
+            <div class="batch-item-ctrls">
+              <label class="opt grow" title="此素材套用哪个模板（手动框选优先于模板）">
+                <span>模板</span>
+                <select id="batchItemTplSel">
+                  <option value="">跟随全局模板</option>
+                </select>
+              </label>
+              <button class="btn" id="batchItemAddBox"><svg class="ico"><use href="#i-plus"/></svg> 添加框</button>
+              <button class="btn" id="batchItemClear">清空框</button>
+              <button class="btn" id="batchItemAuto"><span class="spinner"></span><span class="btn-txt"><svg class="ico"><use href="#i-sparkle"/></svg> 自动检测</span></button>
+            </div>
+
+            <!-- 当前素材的水印框队列：删除 / 变色 / 重命名（与单个处理一致） -->
+            <div class="box-list hidden" id="batchBoxWrap" style="margin-top:12px">
+              <span class="box-list-title">水印框</span>
+              <div class="box-tags" id="batchBoxList"></div>
+            </div>
+          </div>
+
+          <div class="options">
+            <div class="opt grow">
+              <label>使用模板（未选则用上方已框好的水印）</label>
+              <select id="batchTplSel">
+                <option value="">（不选模板）</option>
+              </select>
+            </div>
+            <div class="opt">
+              <label>引擎</label>
+              <select id="batchEngineSel">
+                <option value="auto">自动（AI 优先）</option>
+                <option value="ai">AI · LaMa</option>
+                <option value="mat">AI · MAT（人像更佳）</option>
+                <option value="propainter">ProPainter（人物保持佳）</option>
+                <option value="opencv">快速 · OpenCV</option>
+              </select>
+            </div>
+            <div class="opt hidden" id="batchQualityBox">
+              <label>画质<span class="hint" data-hint="视频编码质量：Max 最佳但文件大，Good 更小，Auto 自动平衡。"><svg class="ico"><use href="#i-info"/></svg></span></label>
+              <select id="batchQualitySel">
+                <option value="fast">快速</option>
+                <option value="best" selected>高保真</option>
+                <option value="lossless">无损</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn primary big" id="batchBtn"><span class="spinner"></span><span class="btn-txt">批量开始去水印</span></button>
+
+          <div class="card hidden" id="batchCard" style="margin-top:18px">
+            <h2>批量处理进度</h2>
+            <div class="progress"><div class="bar" id="batchBar"></div></div>
+            <p class="status-msg" id="batchMsg">准备中…</p>
+            <div class="table-wrap">
+              <table class="batch-table" id="batchTable">
+                <thead><tr><th>#</th><th>文件</th><th>状态</th><th>进度</th><th>操作</th></tr></thead>
+                <tbody id="batchBody"></tbody>
+              </table>
+            </div>
+            <div class="options">
+              <a class="btn primary hidden" id="batchZipBtn" href="#"><svg class="ico"><use href="#i-download"/></svg> 打包下载全部结果 (ZIP)</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ 模板视图 ============ -->
+        <section class="view-section hidden" id="view-templates">
+          <div class="card" id="tplCard">
+            <h2><svg class="ico"><use href="#i-tpl"/></svg> 我的水印模板</h2>
+            <p class="card-hint">每个模板会预览其<b>遮罩区域</b>。可在"单个处理"中框好水印后保存，或在批量中一键套用。</p>
+            <div class="empty hidden" id="tplEmpty">
+              <div class="empty-ico"><svg class="ico"><use href="#i-inbox"/></svg></div>
+              <div>还没有模板</div>
+              <small>在单个处理中框选水印后点「保存模板」即可创建</small>
+            </div>
+            <div class="tpl-grid" id="tplList"></div>
+          </div>
+        </section>
+
+        <!-- ============ 盲水印视图（图片与视频统一面板） ============ -->
+        <section class="view-section hidden" id="view-wm">
+          <div class="wm-tabs">
+            <button class="btn sm-tab active" id="wmTabEmbed">嵌入水印</button>
+            <button class="btn sm-tab" id="wmTabExtract">提取水印</button>
+          </div>
+
+          <!-- 嵌入 -->
+          <div class="card wm-card" id="wmEmbedPanel">
+            <h2>嵌入盲水印</h2>
+            <p class="card-hint">把一段<b>文字</b>或一张<b>图片</b>“隐形”藏进你的图片/视频里，肉眼看不出来；需要时再提取出来作为版权凭证。</p>
+            <div class="modebar">
+              <button class="sub active" data-wmsub="emb" data-opt="single"><svg class="ico"><use href="#i-target"/></svg> 单个处理</button>
+              <button class="sub" data-wmsub="emb" data-opt="batch"><svg class="ico"><use href="#i-layers"/></svg> 批量处理</button>
+            </div>
+            <div class="options">
+              <div class="opt">
+                <label>水印内容</label>
+                <select id="wmMode">
+                  <option value="str">文字水印</option>
+                  <option value="img">图片水印</option>
+                </select>
+              </div>
+              <div class="opt grow hidden" id="wmImgWrap">
+                <label>选择水印图片</label>
+                <div class="filefield">
+                  <span class="filefield-name" id="wmWmFileName">未选择文件</span>
+                  <button type="button" class="filefield-btn" id="wmWmFileBtn">选择文件</button>
+                  <input id="wmWmFile" type="file" accept="image/*" hidden />
+                </div>
+              </div>
+            </div>
+            <div class="options wm-pad" id="wmTextWrap">
+              <div class="opt grow">
+                <label>要嵌入的文字</label>
+                <input id="wmText" type="text" placeholder="例如：版权所有 2026 张三" />
+              </div>
+            </div>
+            <!-- 单个：上传区与预览窗口共用同一位置（同 DLSS 增强），右上角「更换」 -->
+            <div id="wmEmbSingle">
+              <div class="medbox">
+                <label class="dropzone wm-drop" id="wmDrop">
+                  <input id="wmInput" type="file" accept="image/*,video/*" hidden />
+                  <span class="dz-icon"><svg class="ico"><use href="#i-image"/></svg></span>
+                  <span class="dz-title">点击选择要加水印的图片或视频</span>
+                  <small>jpg / png / webp / mp4 / mov / mkv 等</small>
+                </label>
+                <div class="medstage hidden" id="wmPrevBox">
+                  <img id="wmPrevImg" class="media-el" alt="预览" />
+                  <video id="wmPrevVid" class="media-el hidden" playsinline></video>
+                  <div class="stage-actions">
+                    <button class="replace-btn" id="wmReplaceBtn" title="更换文件"><svg class="ico"><use href="#i-refresh"/></svg> 更换</button>
+                  </div>
+                </div>
+              </div>
+              <div class="options wm-pad">
+                <button class="btn primary" id="wmEmbedBtn"><span class="spinner"></span><span class="btn-txt">开始嵌入</span></button>
+                <span class="wm-tip" id="wmFileLbl">未选择文件</span>
+              </div>
+            </div>
+            <!-- 批量：可继续添加 / 移除 / 点击任意文件切换预览（共用大预览窗口） -->
+            <div id="wmEmbBatch" class="hidden">
+              <div class="medbox">
+                <label class="dropzone wm-drop">
+                  <input id="wmBatchInput" type="file" accept="image/*,video/*" multiple hidden />
+                  <span class="dz-icon"><svg class="ico"><use href="#i-layers"/></svg></span>
+                  <span class="dz-title">点击选择要多张要加水印的文件（可多选）</span>
+                  <small>支持同时选多张图片 / 多个视频，选后可继续添加、移除</small>
+                </label>
+                <div class="medstage hidden" id="wmBatchStage">
+                  <img id="wmBatchImg" class="media-el" alt="预览" />
+                  <video id="wmBatchVid" class="media-el hidden" playsinline></video>
+                </div>
+              </div>
+              <div class="enh-strip hidden" id="wmBatchGrid"></div>
+              <div class="options wm-pad">
+                <button class="btn primary" id="wmEmbedBatchBtn"><span class="spinner"></span><span class="btn-txt">开始批量嵌入</span></button>
+                <span class="wm-tip" id="wmBatchLbl">未选择文件</span>
+              </div>
+              <div class="card wm-result hidden" id="wmBatchResult"></div>
+            </div>
+            <details class="wm-adv"><summary>高级设置（可选）</summary>
+              <div class="options wm-pad">
+                <div class="opt grow">
+                  <label>画质保护</label>
+                  <select id="wmStrength" title="水印嵌入强度：画质越好则抗攻击性越弱，反之亦然">
+                    <option value="quality" selected>高画质 · 几乎无感（推荐）</option>
+                    <option value="balanced">均衡 · 轻微画质变化</option>
+                    <option value="robust">最强保护 · 画质损失较明显</option>
+                  </select>
+                </div>
+                <div class="opt grow">
+                  <label>提取口令</label>
+                  <input id="wmPw" type="text" placeholder="不填会自动生成，无需记"
+                    title="用于加密水印、防止他人随意提取。留空即可。" />
+                </div>
+              </div>
+              <p class="card-hint wm-pad">画质保护越低画面越接近原图；使用「提取识别码」提取时无需填写任何参数。</p>
+            </details>
+            <div class="card hidden" id="wmEmbedProg" style="margin-top:10px">
+              <div class="progress"><div class="bar" id="wmEmbedBar"></div></div>
+              <p class="status-msg" id="wmEmbedMsg">准备中…</p>
+            </div>
+            <div class="card wm-result hidden" id="wmResult">
+              <h3><svg class="ico"><use href="#i-check"/></svg> 嵌入完成 · 结果已显示在上方预览窗口</h3>
+              <p class="wm-key-row"><b>提取识别码：</b><code id="wmKeyText"></code><button class="btn small ghost" id="wmKeyCopy"><svg class="ico"><use href="#i-copy"/></svg> 复制</button></p>
+              <p class="wm-key-row hidden" id="wmShapeRow"><b>实际嵌入尺寸：</b><code id="wmShapeText"></code><span class="card-hint">（大水印图会被自动缩小以适配源图容量；提取图片水印时按此填写）</span></p>
+              <p class="card-hint">请保存好上面的识别码。提取时选这个带水印的文件、输入识别码即可，<b>无需记住口令或长度</b>。</p>
+              <div class="options">
+                <a class="btn primary" id="wmOutLink" href="#"><svg class="ico"><use href="#i-download"/></svg> 下载结果</a>
+                <button class="btn" id="wmGoExtract"><svg class="ico"><use href="#i-search"/></svg> 去提取水印</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 提取 -->
+          <div class="card wm-card hidden" id="wmExtractPanel">
+            <h2>提取盲水印</h2>
+            <p class="card-hint">选一个带水印的文件，输入嵌入时得到的「提取识别码」，即可自动提取出里面的水印。</p>
+            <div class="modebar">
+              <button class="sub active" data-wmsub="ex" data-opt="single"><svg class="ico"><use href="#i-target"/></svg> 单个处理</button>
+              <button class="sub" data-wmsub="ex" data-opt="batch"><svg class="ico"><use href="#i-layers"/></svg> 批量处理</button>
+            </div>
+            <div class="options wm-pad">
+              <div class="opt grow">
+                <label>提取识别码</label>
+                <input id="wmExKey" type="text" placeholder="嵌入水印时显示的那串识别码" />
+              </div>
+            </div>
+            <!-- 单个：上传区与预览窗口共用同一位置（同 DLSS 增强），右上角「更换」 -->
+            <div id="wmExSingle">
+              <div class="medbox">
+                <label class="dropzone wm-drop" id="wmExDrop">
+                  <input id="wmExInput" type="file" accept="image/*,video/*" hidden />
+                  <span class="dz-icon"><svg class="ico"><use href="#i-search"/></svg></span>
+                  <span class="dz-title">点击选择含水印的图片或视频</span>
+                  <small>jpg / png / webp / mp4 / mov / mkv 等</small>
+                </label>
+                <div class="medstage hidden" id="wmExPrevBox">
+                  <img id="wmExPrevImg" class="media-el" alt="预览" />
+                  <video id="wmExPrevVid" class="media-el hidden" playsinline></video>
+                  <div class="stage-actions">
+                    <button class="replace-btn" id="wmExReplaceBtn" title="更换文件"><svg class="ico"><use href="#i-refresh"/></svg> 更换</button>
+                  </div>
+                </div>
+              </div>
+              <div class="options wm-pad">
+                <button class="btn primary" id="wmExBtn"><span class="spinner"></span><span class="btn-txt">开始提取</span></button>
+                <span class="wm-tip" id="wmExFileLbl">未选择文件</span>
+              </div>
+            </div>
+            <!-- 批量：可继续添加 / 移除 / 点击任意文件切换预览（共用大预览窗口） -->
+            <div id="wmExBatch" class="hidden">
+              <div class="medbox">
+                <label class="dropzone wm-drop">
+                  <input id="wmExBatchInput" type="file" accept="image/*,video/*" multiple hidden />
+                  <span class="dz-icon"><svg class="ico"><use href="#i-layers"/></svg></span>
+                  <span class="dz-title">点击选择多个含水印文件（可多选）</span>
+                  <small>同一识别码批量提取，选后可继续添加、移除</small>
+                </label>
+                <div class="medstage hidden" id="wmExBatchStage">
+                  <img id="wmExBatchImg" class="media-el" alt="预览" />
+                  <video id="wmExBatchVid" class="media-el hidden" playsinline></video>
+                </div>
+              </div>
+              <div class="enh-strip hidden" id="wmExBatchGrid"></div>
+              <div class="options wm-pad">
+                <button class="btn primary" id="wmExBatchBtn"><span class="spinner"></span><span class="btn-txt">开始批量提取</span></button>
+                <span class="wm-tip" id="wmExBatchLbl">未选择文件</span>
+              </div>
+              <div class="card wm-result hidden" id="wmExBatchResult"></div>
+            </div>
+            <div class="card hidden" id="wmExtractProg" style="margin-top:10px">
+              <div class="progress"><div class="bar" id="wmExtractBar"></div></div>
+              <p class="status-msg" id="wmExtractMsg">准备中…</p>
+            </div>
+              <details class="wm-adv"><summary>没有识别码？点此手动填写参数（高级）</summary>
+              <div class="options wm-pad">
+                <div class="opt"><label>水印类型</label>
+                  <select id="wmExMode"><option value="str">文字水印</option><option value="img">图片水印</option></select></div>
+                <div class="opt grow hidden" id="wmExShapeWrap"><label>水印图宽高</label>
+                  <input id="wmExShape" type="text" placeholder="留空自动读取尺寸；或手动填 高,宽" /></div>
+                <div class="opt grow"><label>提取口令</label>
+                  <input id="wmExPw" type="text" placeholder="嵌入时填的口令；未填则留空" /></div>
+              </div>
+              <p class="card-hint wm-pad">文字水印无需填写长度与强度——软件会自动匹配。仅当水印不是由本软件嵌入（无识别码）时才需要手动填写。</p>
+            </details>
+            <div class="card wm-result hidden" id="wmExResult">
+              <h3><svg class="ico"><use href="#i-search"/></svg> 提取结果</h3>
+              <p class="status-msg" id="wmExTextLbl"></p>
+              <div class="pv-center hidden" id="wmExImgWrap"><img id="wmExImg" class="media-el" alt="水印" /></div>
+              <a class="btn primary hidden" id="wmExImgLink" href="#"><svg class="ico"><use href="#i-download"/></svg> 下载水印图</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ DLSS5 视觉增强视图（原生面板，体积并入本项目） ============ -->
+        <section class="view-section hidden" id="view-dlss">
+          <div class="card enhance-card">
+            <div class="enh-banner" id="enhStatusBar">
+              <span class="spinner sm"></span>
+              <span id="enhStatusTxt">正在初始化 DLSS 运行时（首次加载较慢）…</span>
+            </div>
+
+            <div class="wm-tabs">
+              <button class="btn sm-tab active" data-enhtab="image"><svg class="ico"><use href="#i-image"/></svg> 图片增强</button>
+              <button class="btn sm-tab" data-enhtab="video"><svg class="ico"><use href="#i-film"/></svg> 视频增强</button>
+              <button class="btn sm-tab" data-enhtab="interp"><svg class="ico"><use href="#i-ffwd"/></svg> 插帧</button>
+            </div>
+            <p class="enh-hint warn hidden" id="interpDisabledHint"></p>
+
+            <!-- ========== 图片增强 ========== -->
+            <div class="enh-panel" id="enhImage">
+              <div class="modebar">
+                <button class="sub active" data-dlss-mode="single"><svg class="ico"><use href="#i-target"/></svg> 单个处理</button>
+                <button class="sub" data-dlss-mode="batch"><svg class="ico"><use href="#i-layers"/></svg> 批量处理</button>
+              </div>
+
+              <div class="enh-sec">
+                <label class="field-label">DLSS 5 神经渲染</label>
+                <div class="options">
+                  <div class="opt"><label>NR Preset<span class="hint" data-hint="降噪档位：Default 自动最佳，J/K/L/M 越靠后处理越强。日常保持默认即可。"><svg class="ico"><use href="#i-info"/></svg></span></label>
+                    <select id="imNrPreset"><option selected>Default</option><option>J</option><option>K</option><option>L</option><option>M</option></select></div>
+                  <div class="opt"><label>NR Style<span class="hint" data-hint="画面风格：Default 自动、Natural 更贴近原片质感、Cinematic 更强电影色调。"><svg class="ico"><use href="#i-info"/></svg></span></label>
+                    <select id="imNrStyle"><option selected>Default</option><option>Natural</option><option>Cinematic</option></select></div>
+                  <div class="opt"><label>放大倍率<span class="hint" data-hint="输出放大几倍：1× 保原尺寸仅优化，3× 最大。越大越清晰但更耗时。"><svg class="ico"><use href="#i-info"/></svg></span></label>
+                    <select id="imUp">
+                      <option value="1.0" selected>1× (DLAA / 原生分辨率)</option>
+                      <option value="1.5">1.5× (Quality)</option>
+                      <option value="1.724">1.724× (Balanced)</option>
+                      <option value="2.0">2× (Performance)</option>
+                      <option value="3.0">3× (Ultra)</option>
+                    </select></div>
+                  <div class="opt"><label>自动遮罩<span class="hint" data-hint="自动识别并保护人脸、文字等易失真区域，避免被过度处理。On 更稳妥。"><svg class="ico"><use href="#i-info"/></svg></span></label>
+                    <select id="imMask"><option value="Off" selected>Off</option><option value="On">On</option></select></div>
+                </div>
+                <div class="options">
+                  <div class="opt"><label>NR 强度<span class="hint" data-hint="降噪力度 0~2：越高越平滑、细节越少，1 为标准。"><svg class="ico"><use href="#i-info"/></svg></span></label>
+                    <input id="imNrInt" type="range" min="0" max="2" step="0.05" value="1.0" /><span class="range-val" id="imNrIntV">1.0</span></div>
+                  <div class="opt"><label>局部色调<span class="hint" data-hint="局部明暗与对比度增强力度，1 为标准即可。"><svg class="ico"><use href="#i-info"/></svg></span></label>
+                    <input id="imLtone" type="range" min="0" max="2" step="0.05" value="1.0" /><span class="range-val" id="imLtoneV">1.0</span></div>
+                  <div class="opt"><label>局部结构<span class="hint" data-hint="局部细节与纹理锐化力度，1 为标准。"><svg class="ico"><use href="#i-info"/></svg></span></label>
+                    <input id="imLstr" type="range" min="0" max="2" step="0.05" value="1.0" /><span class="range-val" id="imLstrV">1.0</span></div>
+                  <div class="opt"><label>皮肤结构<span class="hint" data-hint="皮肤质感：负数为磨皮、正数保留毛孔细节，默认 -1 偏自然。"><svg class="ico"><use href="#i-info"/></svg></span></label>
+                    <input id="imSkin" type="range" min="-1" max="2" step="0.05" value="-1.0" /><span class="range-val" id="imSkinV">-1.0</span></div>
+                </div>
+                <div class="options">
+                  <div class="opt"><label>DLSS 模型预设<span class="hint" data-hint="核心模型档位，Default 自动且通常最佳。一般无需改动。"><svg class="ico"><use href="#i-info"/></svg></span></label>
+                    <select id="imModel"><option selected>Default</option><option>J</option><option>K</option><option>L</option><option>M</option></select></div>
+                  <div class="opt"><label>输出格式<span class="hint" data-hint="保存格式：PNG 无损最清晰但体积大；JPEG/WebP/AVIF 更小更通用。"><svg class="ico"><use href="#i-info"/></svg></span></label>
+                    <select id="imFormat"><option selected>PNG</option><option>JPEG</option><option>WebP</option><option>AVIF</option><option>TIFF</option></select></div>
+                  <div class="opt"><label>画质<span class="hint" data-hint="有损格式（JPEG/WebP/AVIF）的质量：100 即最高画质，接近无损。PNG/TIFF 本身无损，此项明确不影响。"><svg class="ico"><use href="#i-info"/></svg></span></label>
+                    <input id="imQuality" type="number" min="1" max="100" value="100" style="width:70px" /></div>
+                  <div class="opt"><label>重命名<span class="hint" data-hint="输出命名规则：Auto 自动、Copy 保留原名、Custom 使用下方的后缀。"><svg class="ico"><use href="#i-info"/></svg></span></label>
+                    <select id="imRename"><option selected>Auto</option><option>Copy</option><option>Custom</option></select></div>
+                  <div class="opt"><label>后缀<span class="hint" data-hint="追加到文件名尾的文字，用于区分增强前后。仅在重命名为自定义时生效。"><svg class="ico"><use href="#i-info"/></svg></span></label>
+                    <input id="imSuffix" type="text" value="_DLSS5" style="width:90px" /></div>
+                </div>
+              </div>
+
+              <!-- ========== 单个处理 ========== -->
+              <div class="dlss-pane" id="dlssSingle">
+                <div class="medbox">
+                  <label class="dropzone enh-drop" id="sDrop">
+                    <input id="sFiles" type="file" accept="image/*,image/heic,image/heif,.svg,.raw,.dng" hidden />
+                    <span class="dz-icon"><svg class="ico"><use href="#i-image"/></svg></span>
+                    <span class="dz-title">点击或拖拽一张图片到此处</span>
+                    <small>jpg / png / webp / tiff / heic / raw 等</small>
+                  </label>
+                  <div class="medstage hidden" id="sStage">
+                    <img id="sOrig" alt="原图" />
+                    <img id="sEnh" alt="增强后" hidden />
+                    <div class="vs-livePrev__busy hidden" id="sPrevBusy">
+                      <span class="spinner"></span>
+                      <span class="vs-livePrev__busy-txt" id="sPrevBusyTxt">正在生成预览…</span>
+                    </div>
+                    <div id="sCmp" class="enh-cmp hidden"></div>
+                    <div class="stage-actions">
+                      <button class="mode-switch" id="sModeBtn" disabled title="切换显示">原图</button>
+                      <button class="replace-btn" id="sReplace" title="重新选择文件"><svg class="ico"><use href="#i-refresh"/></svg> 更换</button>
+                    </div>
+                  </div>
+                </div>
+
+                <p class="mini-hint">小技巧：调节任意参数会自动实时渲染这张图的增强效果，无需点「开始增强」（右上角 设置 中可开关）。</p>
+                <div class="options">
+                  <button class="btn primary" id="sBtn"><span class="spinner"></span><span class="btn-txt">开始增强</span></button>
+                </div>
+
+                <div class="card hidden" id="sProg" style="margin-top:12px">
+                  <div class="progress"><div class="bar"></div></div>
+                  <p class="status-msg">准备中…</p>
+                </div>
+                <div class="card hidden" id="sResult" style="margin-top:12px">
+                  <h3><svg class="ico"><use href="#i-check"/></svg> 增强完成 · 用上方按钮在原图 / 增强后 / 前后对比间切换</h3>
+                  <div class="options" style="justify-content:flex-start"><div id="sDl"></div></div>
+                </div>
+              </div>
+
+              <!-- ========== 批量处理 ========== -->
+              <div class="dlss-pane hidden" id="dlssBatch">
+                <div class="medbox">
+                  <label class="dropzone enh-drop" id="bDrop">
+                    <input id="bFiles" type="file" accept="image/*,image/heic,image/heif,.svg,.raw,.dng" multiple hidden />
+                    <span class="dz-icon"><svg class="ico"><use href="#i-image"/></svg></span>
+                    <span class="dz-title">选择多张图片 / 拖拽到此处</span>
+                    <small>jpg / png / webp / tiff / heic / raw 等；选后可继续添加、移除，点击任意图片预览</small>
+                  </label>
+                  <div class="medstage hidden" id="bStage">
+                    <img id="bOrig" alt="原图" />
+                    <img id="bEnh" alt="增强后" hidden />
+                    <div id="bCmp" class="enh-cmp hidden"></div>
+                    <div class="stage-actions">
+                      <button class="mode-switch" id="bModeBtn" disabled title="切换显示">原图</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="enh-strip hidden" id="bList"></div>
+
+                <div class="options">
+                  <button class="btn primary" id="bBtn"><span class="spinner"></span><span class="btn-txt">开始批量增强</span></button>
+                </div>
+
+                <div class="card hidden" id="bProg" style="margin-top:12px">
+                  <div class="progress"><div class="bar"></div></div>
+                  <p class="status-msg">准备中…</p>
+                </div>
+                <div class="card hidden" id="bResult" style="margin-top:12px">
+                  <h3><svg class="ico"><use href="#i-check"/></svg> 增强完成 · 点击上方缩略图切换 原图 / 增强后 / 前后对比 预览</h3>
+                  <div id="bOut"></div>
+                  <div class="options" style="justify-content:flex-start" id="bDl"></div>
+                </div>
+            </div>
+            </div>
+
+            <!-- ========== 视频增强 ========== -->
+            <div class="enh-panel hidden" id="enhVideo">
+              <div class="modebar">
+                <button class="sub active" data-dlss-vmode="single"><svg class="ico"><use href="#i-target"/></svg> 单个处理</button>
+                <button class="sub" data-dlss-vmode="batch"><svg class="ico"><use href="#i-layers"/></svg> 批量处理</button>
+              </div>
+
+              <div class="enh-sec">
+                <label class="field-label">DLSS 5 神经渲染</label>
+                <div class="options">
+                  <div class="opt"><label>NR Preset<span class="hint" data-hint="降噪档位：Default 自动最佳，J/K/L/M 越靠后处理越强。日常保持默认即可。"><svg class="ico"><use href="#i-info"/></svg></span></label>
+                    <select id="vdNrPreset"><option selected>Default</option><option>J</option><option>K</option><option>L</option><option>M</option></select></div>
+                  <div class="opt"><label>NR Style<span class="hint" data-hint="画面风格：Default 自动、Natural 更贴近原片质感、Cinematic 更强电影色调。"><svg class="ico"><use href="#i-info"/></svg></span></label>
+                    <select id="vdNrStyle"><option selected>Default</option><option>Natural</option><option>Cinematic</option></select></div>
+                  <div class="opt"><label>放大倍率<span class="hint" data-hint="输出放大几倍：1× 保原尺寸仅优化，3× 最大。越大越清晰但更耗时。"><svg class="ico"><use href="#i-info"/></svg></span></label>
+                    <select id="vdUp">
+                      <option value="1.0" selected>1× (DLAA)</option>
+                      <option value="1.5">1.5× (Quality)</option>
+                      <option value="1.724">1.724× (Balanced)</option>
+                      <option value="2.0">2× (Performance)</option>
+                      <option value="3.0">3× (Ultra)</option>
+                    </select></div>
+                  <div class="opt"><label>自动遮罩<span class="hint" data-hint="自动识别并保护人脸、文字等易失真区域，避免被过度处理。On 更稳妥。"><svg class="ico"><use href="#i-info"/></svg></span></label>
+                    <select id="vdMask"><option value="Off" selected>Off</option><option value="On">On</option></select></div>
+                  <div class="opt"><label>DLSS 模型预设<span class="hint" data-hint="核心模型档位，Default 自动且通常最佳。一般无需改动。"><svg class="ico"><use href="#i-info"/></svg></span></label>
+                    <select id="vdModel"><option selected>Default</option><option>J</option><option>K</option><option>L</option><option>M</option></select></div>
+                </div>
+                <div class="options">
+                  <div class="opt"><label>NR 强度<span class="hint" data-hint="降噪力度 0~2：越高越平滑、细节越少，1 为标准。"><svg class="ico"><use href="#i-info"/></svg></span></label>
+                    <input id="vdNrInt" type="range" min="0" max="2" step="0.05" value="1.0" /><span class="range-val" id="vdNrIntV">1.0</span></div>
+                  <div class="opt"><label>局部色调<span class="hint" data-hint="局部明暗与对比度增强力度，1 为标准即可。"><svg class="ico"><use href="#i-info"/></svg></span></label>
+                    <input id="vdLtone" type="range" min="0" max="2" step="0.05" value="1.0" /><span class="range-val" id="vdLtoneV">1.0</span></div>
+                  <div class="opt"><label>局部结构<span class="hint" data-hint="局部细节与纹理锐化力度，1 为标准。"><svg class="ico"><use href="#i-info"/></svg></span></label>
+                    <input id="vdLstr" type="range" min="0" max="2" step="0.05" value="1.0" /><span class="range-val" id="vdLstrV">1.0</span></div>
+                  <div class="opt"><label>皮肤结构<span class="hint" data-hint="皮肤质感：负数为磨皮、正数保留毛孔细节，默认 -1 偏自然。"><svg class="ico"><use href="#i-info"/></svg></span></label>
+                    <input id="vdSkin" type="range" min="-1" max="2" step="0.05" value="-1.0" /><span class="range-val" id="vdSkinV">-1.0</span></div>
+                </div>
+                <div class="options">
+                  <div class="opt"><label>编码器<span class="hint" data-hint="视频压缩标准：H.264 兼容性最好；H.265/AV1 更省空间；带 NVENC 的用显卡加速更省时。"><svg class="ico"><use href="#i-info"/></svg></span></label>
+                    <select id="vdCodec">
+                      <option selected>H.264</option><option>H.264 (NVIDIA NVENC)</option><option>H.265</option>
+                      <option>H.265 (NVIDIA NVENC)</option><option>AV1</option><option>AV1 (NVIDIA NVENC)</option><option>ProRes Proxy</option>
+                    </select></div>
+                  <div class="opt"><label>容器<span class="hint" data-hint="视频封装格式：MP4 最通用，MKV/MOV 兼容性与功能稍强。"><svg class="ico"><use href="#i-info"/></svg></span></label>
+                    <select id="vdContainer"><option selected>MP4</option><option>MKV</option><option>MOV</option></select></div>
+                  <div class="opt"><label>画质<span class="hint" data-hint="视频编码质量：Max 最佳但文件大，Good 更小，Auto 自动平衡。"><svg class="ico"><use href="#i-info"/></svg></span></label>
+                    <select id="vdQuality"><option selected>Auto (Default)</option><option>Max</option><option>Best</option><option>Good</option></select></div>
+                  <div class="opt"><label>HDR<span class="hint" data-hint="是否保留高动态范围(HDR)色彩。普通视频请保持关闭。"><svg class="ico"><use href="#i-info"/></svg></span></label>
+                    <select id="vdHdr"><option value="false" selected>关</option><option value="true">开</option></select></div>
+                  <div class="opt"><label>重命名<span class="hint" data-hint="输出命名规则：Auto 自动、Copy 保留原名、Custom 使用下方的后缀。"><svg class="ico"><use href="#i-info"/></svg></span></label>
+                    <select id="vdRename"><option selected>Auto</option><option>Copy</option><option>Custom</option></select></div>
+                  <div class="opt"><label>后缀<span class="hint" data-hint="追加到文件名尾的文字，用于区分增强前后。仅在重命名为自定义时生效。"><svg class="ico"><use href="#i-info"/></svg></span></label>
+                    <input id="vdSuffix" type="text" value="_DLSS5" style="width:80px" /></div>
+                </div>
+              </div>
+
+              <!-- ========== 单个处理 ========== -->
+              <div class="dlss-pane" id="vsSingle">
+                <div class="medbox">
+                  <label class="dropzone enh-drop" id="vsDrop">
+                    <input id="vsFiles" type="file" accept="video/*" hidden />
+                    <span class="dz-icon"><svg class="ico"><use href="#i-film"/></svg></span>
+                    <span class="dz-title">点击或拖拽一个视频到此处</span>
+                    <small>mp4 / mov / mkv / avi 等</small>
+                  </label>
+                  <div class="medstage hidden" id="vsStage">
+                    <video id="vsOrig"></video>
+                    <video id="vsEnh" hidden></video>
+                    <div id="vsCmp" class="enh-cmp hidden"></div>
+                    <div class="vs-livePrev hidden" id="vsPrevWrap">
+                      <img id="vsPrev" alt="实时预览" />
+                      <div class="vs-livePrev__busy hidden" id="vsPrevBusy">
+                        <span class="spinner"></span>
+                        <span class="vs-livePrev__busy-txt" id="vsPrevBusyTxt">正在生成预览…</span>
+                      </div>
+                      <span class="vs-livePrev__tag">实时预览</span>
+                    </div>
+                    <div class="stage-actions">
+                      <button class="mode-switch" id="vsModeBtn" disabled title="切换显示">原视频</button>
+                      <button class="replace-btn" id="vsReplace" title="重新选择文件"><svg class="ico"><use href="#i-refresh"/></svg> 更换</button>
+                    </div>
+                  </div>
+                </div>
+
+                <p class="mini-hint">小技巧：调节任意参数会自动「实时预览」当前画面的增强效果（右上角 设置 中可开关）；拿不准就点「渲染 3 秒预览」，先看前 3 秒实际效果，满意再开始增强。</p>
+                <div class="options">
+                  <button class="btn primary" id="vsBtn"><span class="spinner"></span><span class="btn-txt">开始增强</span></button>
+                  <button class="btn ghost" id="vsPrev3sBtn" title="只渲染前 3 秒，先看效果再调参数"><span class="spinner"></span><span class="btn-txt">渲染 3 秒预览</span></button>
+                </div>
+
+                <div class="card hidden" id="vsProg" style="margin-top:12px">
+                  <div class="progress"><div class="bar"></div></div>
+                  <p class="status-msg">准备中…</p>
+                </div>
+                <div class="card hidden" id="vsResult" style="margin-top:12px">
+                  <h3><svg class="ico"><use href="#i-check"/></svg> <span id="vsResultTxt">增强完成 · 用上方按钮在原视频 / 增强后 / 前后对比间切换</span></h3>
+                  <div class="options" style="justify-content:flex-start"><span id="vsDl"></span></div>
+                </div>
+              </div>
+
+              <!-- ========== 批量处理 ========== -->
+              <div class="dlss-pane hidden" id="vsBatch">
+                <div class="medbox">
+                  <label class="dropzone enh-drop" id="vbDrop">
+                    <input id="vbFiles" type="file" accept="video/*" multiple hidden />
+                    <span class="dz-icon"><svg class="ico"><use href="#i-film"/></svg></span>
+                    <span class="dz-title">选择多个视频 / 拖拽到此处</span>
+                    <small>mp4 / mov / mkv / avi 等；选后可继续添加、移除，点击任意视频预览</small>
+                  </label>
+                  <div class="medstage hidden" id="vbStage">
+                    <video id="vbOrig"></video>
+                    <video id="vbEnh" hidden></video>
+                    <div id="vbCmp" class="enh-cmp hidden"></div>
+                    <div class="stage-actions">
+                      <button class="mode-switch" id="vbModeBtn" disabled title="切换显示">原视频</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="enh-strip hidden" id="vbList"></div>
+
+                <div class="options">
+                  <button class="btn primary" id="vbBtn"><span class="spinner"></span><span class="btn-txt">开始批量增强</span></button>
+                </div>
+
+                <div class="card hidden" id="vbProg" style="margin-top:12px">
+                  <div class="progress"><div class="bar"></div></div>
+                  <p class="status-msg">准备中…</p>
+                </div>
+                <div class="card hidden" id="vbResult" style="margin-top:12px">
+                  <h3><svg class="ico"><use href="#i-check"/></svg> 增强完成 · 点击上方缩略图切换 原视频 / 增强后 / 前后对比 预览</h3>
+                  <div id="vbOut"></div>
+                  <div class="options" style="justify-content:flex-start" id="vbDl"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ========== 插帧 ========== -->
+            <div class="enh-panel hidden" id="enhInterp">
+              <div class="medbox">
+                <label class="dropzone enh-drop">
+                  <input id="ipFiles" type="file" accept="video/*" multiple hidden />
+                  <span class="dz-icon"><svg class="ico"><use href="#i-upload"/></svg></span>
+                  <span class="dz-title">选择一个或多个视频</span>
+                  <small>拖入或点击选择；选后可继续添加、移除，点击任意视频预览</small>
+                </label>
+                <div class="medstage hidden" id="ipStage">
+                  <video id="ipVid" class="media-el" playsinline></video>
+                  <div class="stage-actions">
+                    <button class="mode-switch" id="ipModeBtn" disabled title="切换显示">原视频</button>
+                  </div>
+                </div>
+              </div>
+              <div class="enh-strip hidden" id="ipGrid"></div>
+
+              <div class="enh-sec">
+                <div class="options">
+                  <div class="opt"><label>目标 FPS<span class="hint" data-hint="补帧到每秒多少帧：越高越流畅但耗时越久，60 最常用。"><svg class="ico"><use href="#i-info"/></svg></span></label>
+                    <select id="ipFps">
+                      <option>23.976</option><option>25</option><option>29.97</option><option>30</option>
+                      <option selected>60</option><option>50</option><option>59.94</option><option>90</option><option>120</option>
+                    </select></div>
+                  <div class="opt"><label>插帧引擎<span class="hint" data-hint="补帧引擎：Auto 自动选最优；软件光流兼容所有设备(较慢)；原生仅限 RTX 40 系以上。"><svg class="ico"><use href="#i-info"/></svg></span></label>
+                    <select id="ipEngine"><option selected>Auto</option><option>Native DLSSG</option><option>Cascade</option><option value="Software" disabled>软件光流（兼容）</option></select></div>
+                  <div class="opt"><label>编码器<span class="hint" data-hint="视频压缩标准：H.264 兼容性最好；H.265/AV1 更省空间；带 NVENC 的用显卡加速更省时。"><svg class="ico"><use href="#i-info"/></svg></span></label>
+                    <select id="ipCodec">
+                      <option selected>H.264</option><option>H.264 (NVIDIA NVENC)</option><option>H.265</option>
+                      <option>H.265 (NVIDIA NVENC)</option><option>AV1</option><option>AV1 (NVIDIA NVENC)</option><option>ProRes Proxy</option>
+                    </select></div>
+                  <div class="opt"><label>容器<span class="hint" data-hint="视频封装格式：MP4 最通用，MKV/MOV 兼容性与功能稍强。"><svg class="ico"><use href="#i-info"/></svg></span></label>
+                    <select id="ipContainer"><option selected>MP4</option><option>MKV</option><option>MOV</option></select></div>
+                </div>
+                <div class="options">
+                  <div class="opt"><label>画质<span class="hint" data-hint="视频编码质量：Max 最佳但文件大，Good 更小，Auto 自动平衡。"><svg class="ico"><use href="#i-info"/></svg></span></label>
+                    <select id="ipQuality"><option selected>Auto (Default)</option><option>Max</option><option>Best</option><option>Good</option></select></div>
+                  <div class="opt"><label>HDR<span class="hint" data-hint="是否保留高动态范围(HDR)色彩。普通视频请保持关闭。"><svg class="ico"><use href="#i-info"/></svg></span></label>
+                    <select id="ipHdr"><option value="false" selected>关</option><option value="true">开</option></select></div>
+                  <div class="opt"><label>重命名<span class="hint" data-hint="输出命名规则：Auto 自动、Copy 保留原名、Custom 使用下方的后缀。"><svg class="ico"><use href="#i-info"/></svg></span></label>
+                    <select id="ipRename"><option selected>Auto</option><option>Copy</option><option>Custom</option></select></div>
+                  <div class="opt"><label>后缀<span class="hint" data-hint="追加到文件名尾的文字，用于区分增强前后。仅在重命名为自定义时生效。"><svg class="ico"><use href="#i-info"/></svg></span></label>
+                    <input id="ipSuffix" type="text" value="_DLSSFG" style="width:80px" /></div>
+                </div>
+              </div>
+
+              <div class="options">
+                <button class="btn primary" id="ipBtn"><span class="spinner"></span><span class="btn-txt">开始插帧</span></button>
+              </div>
+
+              <div class="card hidden" id="ipProg" style="margin-top:12px">
+                <div class="progress"><div class="bar" id="ipBar"></div></div>
+                <p class="status-msg" id="ipMsg">准备中…</p>
+              </div>
+              <div class="card hidden" id="ipResult" style="margin-top:12px">
+                <h3><svg class="ico"><use href="#i-check"/></svg> 插帧完成</h3>
+                <div class="enh-out" id="ipOut"></div>
+              </div>
+            </div>
+        </section>
+        </div>
+      </div>
+
+      <!-- ===== 结果中心：右侧可展开窗口（展开时挤压主内容区） ===== -->
+      <div class="results" id="results">
+        <button class="res-tab" id="resTab" title="结果中心"><span class="rt-ico"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></span></button>
+        <div class="res-panel" id="resPanel">
+          <div class="res-head">
+            <span class="res-title"><svg class="ico"><use href="#i-box"/></svg> 结果中心</span>
+          </div>
+          <div class="res-subbar">
+            <button class="rf-sub active" data-rfsub="queue"><svg class="ico"><use href="#i-hourglass"/></svg> 队列 <span id="qCount" class="rf-badge">0</span></button>
+            <button class="rf-sub" data-rfsub="history"><svg class="ico"><use href="#i-history"/></svg> 历史 <span id="hCount" class="rf-badge">0</span></button>
+          </div>
+          <div class="res-body">
+            <div id="rfQueue" class="rf-pane"></div>
+            <div id="rfHistory" class="rf-pane hidden"></div>
+          </div>
+          <div class="res-foot">
+            <button class="btn small ghost" id="qClearBtn" title="清空队列"><svg class="ico"><use href="#i-trash"/></svg> 清空队列</button>
+            <button class="btn small ghost hidden" id="hClearBtn" title="清空历史"><svg class="ico"><use href="#i-eraser"/></svg> 清空历史</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="rfMax" class="rf-maxbar hidden"></div>
+
+  <!-- ===== 设置弹窗 ===== -->
+  <div class="modal-backdrop" id="settingsModal" hidden>
+    <div class="modal-card set-card">
+      <div class="modal-head">
+        <h3 class="set-title"><svg class="ico"><use href="#i-gear"/></svg> 设置</h3>
+        <button class="btn small ghost" id="settingsClose" title="关闭"><svg class="ico"><use href="#i-x"/></svg> 关闭</button>
+      </div>
+      <div class="set-row">
+        <label class="set-label" for="deviceSel">运行设备</label>
+        <select id="deviceSel"><option value="auto">自动检测 GPU</option></select>
+        <p class="set-hint">DLSS 增强需要 NVIDIA 显卡才能运行。选「自动检测 GPU」时，软件会优先使用性能最好的显卡。</p>
+      </div>
+      <div class="set-row">
+        <label class="set-check" for="livePrevToggle">
+          <input id="livePrevToggle" type="checkbox" checked />
+          <span class="set-label">实时预览</span>
+        </label>
+        <p class="set-hint">开启后，调节图片 / 视频的增强参数时，画面会立即自动渲染当前图 / 该帧的效果。视频以「当前帧」快速预览。</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="toasts"></div>
+  <script src="/ui/app.js?v=89"></script>
+</body>
+</html>

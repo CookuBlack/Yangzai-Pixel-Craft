@@ -1,0 +1,36 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+.venv/
+venv/
+env/
+
+# ---- 构建产物 ----
+/build/
+/dist/
+*.spec.bak
+
+# ---- 运行期数据 ----
+/data/
+*.log
+gpu_wm.log
+
+# ---- 大型模型/资源（源码仓库不纳入，发布由 pack 分发）----
+/model/
+/dlss/
+/third_party/
+
+# ---- 编辑器 ----
+.idea/
+.vscode/
+*.swp
+
+# ---- 系统 ----
+.DS_Store
+Thumbs.db
+
+# ---- 开发/测试脚本（可选提交，暂不纳入）----
+_e2e2.py
+download_model.py

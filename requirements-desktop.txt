@@ -1,0 +1,3 @@
+# 桌面版额外依赖（在 requirements.txt 基础上追加）：
+#   将本项目以桌面窗口方式运行（python desktop.py）所需。
+pywebview>=6

@@ -1,0 +1,19 @@
+# 基础依赖（必装）
+fastapi>=0.110
+uvicorn[standard]>=0.27
+python-multipart>=0.0.9
+opencv-python-headless>=4.9
+numpy>=1.26
+pillow>=10.0
+imageio-ffmpeg>=0.5
+# 深度学习文本检测（水印自动检测主增强）：需配套模型
+#   model/det/ch_PP-OCRv4_det_infer.onnx（已内置）
+onnxruntime>=1.15
+
+# ===== 可选：高质量 AI 去水印（LaMa / iopaint）=====
+# 需 NVIDIA 独显。请先按本机 CUDA 版本安装 PyTorch，例如：
+#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+# 然后安装：
+#   pip install iopaint
+# 安装后界面会显示「AI 引擎就绪」，并在「引擎」中选择「高质量 AI（LaMa）」。
+# 模型权重请放到项目根目录的 model/ 下（如 model/big-lama.pt），工具会直接加载，无需联网。
