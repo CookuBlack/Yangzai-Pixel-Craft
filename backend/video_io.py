@@ -42,6 +42,7 @@ def _encoders() -> str:
         out = subprocess.run(
             [get_ffmpeg_exe(), "-hide_banner", "-encoders"],
             capture_output=True, text=True, timeout=20,
+            creationflags=subprocess.CREATE_NO_WINDOW,
         )
         return out.stdout or ""
     except Exception:
@@ -59,7 +60,8 @@ def has_nvenc() -> bool:
 def _run_ffmpeg(cmd, timeout=None):
     """运行 ffmpeg；失败时将 stderr 一并抛出，便于定位真正原因。"""
     try:
-        res = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
+        res = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout,
+                             creationflags=subprocess.CREATE_NO_WINDOW)
     except subprocess.TimeoutExpired:
         raise RuntimeError(f"ffmpeg 执行超时（>{timeout}s），命令：{' '.join(cmd)}")
     except FileNotFoundError:

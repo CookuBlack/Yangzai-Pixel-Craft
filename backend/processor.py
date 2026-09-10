@@ -9,6 +9,7 @@
 4. 中间帧默认高质量 JPEG，I/O 更快。
 """
 import os
+import shutil
 import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Optional
@@ -104,6 +105,7 @@ def _crop_region(mask: np.ndarray, w: int, h: int):
 
 def run_job(task_id: str, input_path: str, boxes, engine: str, device: str, quality: str,
             seg_start: Optional[float] = None, seg_end: Optional[float] = None):
+    jobdir = None
     try:
         boxes = boxes or []
         if isinstance(boxes, dict):
@@ -217,6 +219,10 @@ def run_job(task_id: str, input_path: str, boxes, engine: str, device: str, qual
         task_store.update(task_id, status="done", progress=100, message="处理完成", output=out_path)
     except Exception as e:
         task_store.update(task_id, status="error", message=f"处理失败：{e}")
+    finally:
+        # 抽帧 PNG/音频可能达数 GB，无论成功失败都清理任务临时目录（产物在 output/）
+        if jobdir:
+            shutil.rmtree(jobdir, ignore_errors=True)
 
 
 def process_image(task_id: str, input_path: str, boxes, engine: str, device: str):

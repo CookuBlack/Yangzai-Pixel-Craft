@@ -91,14 +91,18 @@ def _random_shuffle(seed, nb):
 
 
 def _ensure_init(wm_cfg, hw):
-    """按 (口令, 尺寸) 初始化并缓存共享常量。返回 cache dict。"""
+    """按 (口令, 水印内容, 尺寸) 初始化并缓存共享常量。返回 cache dict。"""
     password_img = int(wm_cfg.get("pw2") or 1)
+    password_wm = int(wm_cfg.get("pw1") or 1)
     wm_bits = np.asarray(wm_cfg["wm_bits"], dtype=bool)
     wm_size = wm_bits.size
     he, we = hw[0] + (hw[0] % 2), hw[1] + (hw[1] % 2)
     wb, wc = (he // 2) // 4, (we // 2) // 4
     nb = wb * wc
-    key = (password_img, wm_size, he, we)
+    # key 必须包含水印口令与 bit 内容指纹：否则同分辨率、同水印长度的两个并发任务
+    # 会复用彼此的 wm_vector，导致嵌入成另一个任务的水印（用自己口令无法提取）。
+    bits_fp = wm_bits.tobytes()
+    key = (password_img, password_wm, he, we, hash(bits_fp))
     c = _CACHE.get(key)
     if c is None:
         strg = np.asarray(wm_bits, dtype=bool)

@@ -47,6 +47,38 @@ os.makedirs(_WMOUT, exist_ok=True)
 # ---------------------------------------------------------------------------
 _META_FILE = os.path.join(_WMOUT, "wm_meta.json")
 
+# Windows + 冻结(GUI)环境：嵌入回退到 multiprocessing spawn 的每个工作进程都会
+# 各自弹一个黑色命令行窗口（“很多命令行窗口闪动”）。强制 spawn 子进程不建控制台。
+# 注意：popen_spawn_win32.Popen 不是 subprocess.Popen 的子类，其 __init__ 只接收
+# (process_obj)、内部直接调 _winapi.CreateProcess(..., creationflags, ...)，塞
+# creationflags 关键字会 TypeError 打挂整个进程池（多核嵌入静默退化为单线程）。
+# 正确做法：仅在 spawn Popen 初始化的同步调用期间临时包装 CreateProcess，
+# 在其第 6 个参数(dwCreationFlags)上 OR CREATE_NO_WINDOW。
+if sys.platform == "win32":
+    try:
+        import multiprocessing.popen_spawn_win32 as _psw
+
+        _SPAWN_POPEN_INIT = _psw.Popen.__init__
+        _SPAWN_CREATE = _psw._winapi.CreateProcess
+        _CREATE_NO_WINDOW = 0x08000000
+
+        def _spawn_init_no_console(self, process_obj):
+            def _create_no_window(*args):
+                args = list(args)
+                # CreateProcess(app,cmd,pa,ta,inherit,flags,env,cwd,startup)
+                args[5] = int(args[5]) | _CREATE_NO_WINDOW
+                return _SPAWN_CREATE(*args)
+
+            _psw._winapi.CreateProcess = _create_no_window
+            try:
+                return _SPAWN_POPEN_INIT(self, process_obj)
+            finally:
+                _psw._winapi.CreateProcess = _SPAWN_CREATE
+
+        _psw.Popen.__init__ = _spawn_init_no_console
+    except Exception:  # noqa: BLE001
+        pass
+
 
 _ENC_CACHE = {"nv": None}   # 探测结果缓存：None=未探测
 
@@ -58,6 +90,7 @@ def _use_nvenc(ffmpeg_exe) -> bool:
             r = subprocess.run(
                 [ffmpeg_exe, "-hide_banner", "-encoders"],
                 capture_output=True, text=True, timeout=30,
+                creationflags=subprocess.CREATE_NO_WINDOW,
             )
             _ENC_CACHE["nv"] = "h264_nvenc" in r.stdout
         except Exception:  # noqa: BLE001
@@ -405,7 +438,10 @@ async def embed(
     src_name = file.filename or "input"
     kind = _kind(src_name)
     data = await file.read()
-    in_tmp = os.path.join(_WMOUT, f"in_{uuid.uuid4().hex}_{src_name}")
+    # 临时文件只用 uuid+扩展名：原始文件名可能含中文/特殊字符，
+    # Windows 非 UTF-8 代码页下 cv2.imread/VideoCapture 打不开非 ASCII 路径。
+    _ext = os.path.splitext(src_name)[1] or (".mp4" if kind == "video" else ".png")
+    in_tmp = os.path.join(_WMOUT, f"in_{uuid.uuid4().hex}{_ext}")
     with open(in_tmp, "wb") as f:
         f.write(data)
 
@@ -431,6 +467,14 @@ async def embed(
             update(tid, status="failed", progress=100, message=e.detail or "嵌入失败")
         except Exception as e:  # noqa: BLE001
             update(tid, status="failed", progress=100, message=f"嵌入失败: {e}")
+        finally:
+            # 上传的临时副本用完即删，避免 data/wmout 持续膨胀
+            for _tmp in (in_tmp, in_wm):
+                if _tmp:
+                    try:
+                        os.remove(_tmp)
+                    except OSError:
+                        pass
 
     threading.Thread(target=runner, daemon=True).start()
     return {"task_id": tid}
@@ -600,7 +644,7 @@ def _embed_video(wm_cfg, in_path, out_path, progress=None):
         *enc,
         "-pix_fmt", "yuv420p", "-movflags", "+faststart", out_path,
     ]
-    r = subprocess.run(cmd, capture_output=True)
+    r = subprocess.run(cmd, capture_output=True, creationflags=subprocess.CREATE_NO_WINDOW)
     shutil.rmtree(job, ignore_errors=True)
     if r.returncode != 0 or not os.path.exists(out_path):
         raise HTTPException(status_code=500, detail=f"视频编码失败: {r.stderr.decode('utf-8', 'replace')[-400:]}")
@@ -825,7 +869,10 @@ async def extract(
     src_name = file.filename or "input"
     kind = _kind(src_name)
     data = await file.read()
-    in_tmp = os.path.join(_WMOUT, f"in_{uuid.uuid4().hex}_{src_name}")
+    # 临时文件只用 uuid+扩展名：原始文件名可能含中文/特殊字符，
+    # Windows 非 UTF-8 代码页下 cv2.imread/VideoCapture 打不开非 ASCII 路径。
+    _ext = os.path.splitext(src_name)[1] or (".mp4" if kind == "video" else ".png")
+    in_tmp = os.path.join(_WMOUT, f"in_{uuid.uuid4().hex}{_ext}")
     with open(in_tmp, "wb") as f:
         f.write(data)
 
@@ -843,6 +890,11 @@ async def extract(
             update(tid, status="failed", progress=100, message=e.detail or "提取失败")
         except Exception as e:  # noqa: BLE001
             update(tid, status="failed", progress=100, message=f"提取失败: {e}")
+        finally:
+            try:
+                os.remove(in_tmp)
+            except OSError:
+                pass
 
     threading.Thread(target=runner, daemon=True).start()
     return {"task_id": tid}

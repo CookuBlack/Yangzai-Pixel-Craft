@@ -890,13 +890,13 @@ async function likeSingleEnhance() {
           done: () => (bar.style.width = "100%")
         });
         const out = s.outputs && s.outputs[0];
-        if (!out) throw new Error("无输出结果");
+        if (!out) throw new Error((s.failures && s.failures[0] && s.failures[0].error) || "无输出结果");
         sSingle.after = out.url; sSingle.before = before; sSingle.cmpBuilt = false; sSingle.idx = 1;
         sSingle.makeCmp = () => makeCompare(sSingle.before, sSingle.after);
         sUI.cmpEl.innerHTML = ""; sUI.cmpEl.classList.add("hidden");
         if (sSingle.prevUrl) { URL.revokeObjectURL(sSingle.prevUrl); sSingle.prevUrl = null; }
         $("sEnh").src = out.url;
-        $("sEnh").style.width = ""; $("sEnh").style.height = "";  // 正式结果：还原自然尺寸显示
+        $("sEnh").style.width = ""; $("sEnh").style.height = "";  // 正式结果：交由舞台 CSS 等比缩放（scale-to-fit），任意分辨率不黑屏
         enhMode(sUI, sSingle, 1);
         const a = document.createElement("a"); a.href = out.url; a.download = out.name; a.className = "btn small enh-link"; a.innerHTML = ICO("download") + " 下载结果";
         $("sDl").innerHTML = ""; $("sDl").appendChild(a);
@@ -988,7 +988,7 @@ async function likeVideoSingleEnhance() {
           done: () => (bar.style.width = "100%")
         });
         const out = s.outputs && s.outputs[0];
-        if (!out) throw new Error("无输出结果");
+        if (!out) throw new Error((s.failures && s.failures[0] && s.failures[0].error) || "无输出结果");
         vSingle.after = out.url; vSingle.before = before; vSingle.cmpBuilt = false; vSingle.idx = 1;
         vSingle.makeCmp = () => makeVideoCompare(vSingle.before, vSingle.after);
         vUI.cmpEl.innerHTML = ""; vUI.cmpEl.classList.add("hidden");

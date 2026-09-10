@@ -14,6 +14,7 @@ import os
 import sys
 import socket
 import threading
+import multiprocessing
 
 def _app_root() -> str:
     """定位「外置资源根」：PyInstaller 打包后取 exe 所在目录，开发态取本文件
@@ -34,10 +35,15 @@ os.environ["APP_ROOT"] = APP_ROOT
 ROOT = APP_ROOT
 sys.path.insert(0, os.path.join(ROOT, "backend"))
 
+# PyInstaller + multiprocessing spawn：freeze_support 必须在导入任何重型模块
+# （uvicorn/main -> torch/DLSS 预热等）之前调用，否则 spawn 工作进程会先整体
+# 重跑主模块副作用（每个 worker 重复加载大依赖/争用独占型 DLSS 运行时）。
+multiprocessing.freeze_support()
+
 import uvicorn  # noqa: E402
 import main  # noqa: E402  (构建好 main.app)
 
-TITLE = "羊仔像素工艺 · 本地去水印"
+TITLE = "Yangzai Pixel Craft"
 
 
 def _free_port() -> int:
@@ -69,6 +75,9 @@ def _wait_ready(server: uvicorn.Server, timeout: float = 30.0) -> bool:
 
 
 def run():
+    # PyInstaller 打包 + multiprocessing spawn：必须调用 freeze_support()，否则
+    # windowed 引导进程会再次递归执行主模块，导致重复启动/黑窗/子进程异常。
+    multiprocessing.freeze_support()
     # PyInstaller windowed 模式下 sys.stdout/stderr 为 None，uvicorn 的
     # DefaultFormatter 会调用 isatty() 而崩溃（AttributeError），这里兜底为 devnull。
     if sys.stdout is None:

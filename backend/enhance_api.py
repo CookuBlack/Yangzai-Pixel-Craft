@@ -61,6 +61,10 @@ def _ensure_loaded(*, wait: bool = False) -> bool:
     with _init_lock:
         if _init_state["done"]:
             return _init_state["ready"]
+        if _init_state.get("starting"):
+            # 初始化线程已在运行：直接返回未就绪，不再重复起线程（避免惊群争用独占型原生运行时）
+            return False
+        _init_state["starting"] = True
         if not _DLSS_ROOT in sys.path:
             sys.path.insert(0, _DLSS_ROOT)
 
@@ -74,6 +78,8 @@ def _ensure_loaded(*, wait: bool = False) -> bool:
                 threading.Thread(target=_probe_caps_thread, daemon=True).start()
             except Exception as e:  # noqa: BLE001
                 _init_state.update(done=True, ready=False, error=f"{e}")
+            finally:
+                _init_state["starting"] = False
 
         if wait:
             _init()
@@ -505,7 +511,7 @@ async def enhance_video_preview(
         cmd = [ffmpeg, "-y", "-loglevel", "error", "-i", src,
                "-t", f"{seconds:.3f}", "-c:v", "libx264", "-preset", "veryfast",
                "-crf", "20", "-c:a", "aac", dest]
-        proc = subprocess.run(cmd, capture_output=True)
+        proc = subprocess.run(cmd, capture_output=True, creationflags=subprocess.CREATE_NO_WINDOW)
         if proc.returncode != 0 or not os.path.exists(dest):
             err = proc.stderr.decode("utf-8", "replace")[-300:]
             raise RuntimeError(f"截取前 {seconds:g} 秒失败：{err}")
@@ -573,7 +579,8 @@ async def enhance_interpolate(
         probe = subprocess.run(
             [str(FFPROBE), "-v", "error", "-show_entries", "format=duration",
              "-of", "default=noprint_wrappers=1:nokey=1", src],
-            capture_output=True, text=True, timeout=30)
+            capture_output=True, text=True, timeout=30,
+            creationflags=subprocess.CREATE_NO_WINDOW)
         total = float(probe.stdout.strip() or 0)
         crf = {"Max": 16, "Best": 18}.get(quality, 20 if quality.startswith("Auto") else 23)
         cmd = [str(FFMPEG), "-y", "-i", src,
@@ -582,7 +589,8 @@ async def enhance_interpolate(
                "-c:a", "copy", "-movflags", "+faststart",
                "-progress", "pipe:1", "-nostats", out_path]
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
-                                text=True, encoding="utf-8", errors="replace")
+                                text=True, encoding="utf-8", errors="replace",
+                                creationflags=subprocess.CREATE_NO_WINDOW)
         for line in proc.stdout:
             if line.startswith("out_time_us="):
                 try:

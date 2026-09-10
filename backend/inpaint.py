@@ -188,7 +188,7 @@ def mat_available() -> bool:
 
 def _get_mat_model(device: str):
     """直接实例化 MAT 模型（绕过 ModelManager 注册门槛），并缓存。"""
-    global _MAT_MODEL, _MAT_DEVICE
+    global _MAT_MODEL, _MAT_DEVICE, _SCHEMA
     device = _norm_device(device)
     if _MAT_MODEL is not None and _MAT_DEVICE == device:
         return _MAT_MODEL
@@ -204,10 +204,14 @@ def _get_mat_model(device: str):
 
     if pkg == "iopaint":
         from iopaint.model.mat import MAT
+        from iopaint.schema import InpaintRequest, HDStrategy
 
         model = MAT(device)
+        # 必须同步设置 _SCHEMA：inpaint_mat 依赖 (InpaintRequest, HDStrategy)，
+        # 否则全新进程直接选 MAT 会 TypeError 并被静默降级为 OpenCV 修复。
+        _SCHEMA = (InpaintRequest, HDStrategy)
     else:
-        # 旧版 lama_cleaner 无 MAT，回退 LaMa
+        # 旧版 lama_cleaner 无 MAT，回退 LaMa（该函数内部会设置 _SCHEMA）
         return _get_lama_model(device)
 
     _MAT_MODEL, _MAT_DEVICE = model, device

@@ -994,6 +994,11 @@ h2.err-title { color: var(--danger); }
 .medstage.hidden { display: none; }
 /* 媒体铺满舞台（object-fit:contain 不变形）：原图/增强后/前后对比 显示区域完全一致 */
 .medstage img, .medstage video { width: 100%; height: 100%; max-width: 100%; max-height: 100%; border-radius: 8px; background: #000; object-fit: contain; }
+/* 兜底修复：增强结果可能因 8K 上限回落，输出尺寸远大/小于原图（如 2880x1616 -> 5760x3232）。
+   若沿用 width/height:100% + object-fit，舞台被锁成满格黑底，超大位图在合成器里降采样失败会整块黑屏。
+   这里改为：直接媒体按自然比例在舞台内等比缩放、完整可见（scale-to-fit），与位图像素数无关。
+   （仅命中 sStage/bStage 的直接子 <img>，不影响 .enh-cmp 对比内部封面图，也不影响视频留黑边容器） */
+#sStage > img, #bStage > img { width: auto; height: auto; max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
 /* 对比组件内部的封面图由容器控制尺寸，避免被 .medstage 的 max-height 限制导致缩得太小 */
 .medstage .enh-cmp .cmp-after, .medstage .enh-cmp .cmp-before { max-height: none; }
 .medstage .enh-cmp { margin: 0; }

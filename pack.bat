@@ -41,7 +41,7 @@ echo [4/4] Assemble: dist\yangzai ...
 set "APP=dist\yangzai"
 if not exist "%APP%" mkdir "%APP%"
 
-if exist "dist\sheep_app\sheep_app.exe" move /Y "dist\sheep_app\sheep_app.exe" "%APP%\YangZai.exe" >nul 2>nul
+if exist "dist\sheep_app\sheep_app.exe" move /Y "dist\sheep_app\sheep_app.exe" "%APP%\Yangzai Pixel Craft.exe" >nul 2>nul
 if exist "dist\sheep_app\_internal" robocopy "dist\sheep_app\_internal" "%APP%\_internal" /E /MOVE /NFL /NDL /NJH /NJS >nul
 
 REM 注意：cudnn_engines_precompiled64_9.dll 是 torch 2.5.1+cu121 / cudnn 9 的
@@ -59,7 +59,7 @@ if exist dlss robocopy dlss "%APP%\dlss" /E /NFL /NDL /NJH /NJS /XD logs outputs
 echo.
 echo ==========================================================
 echo  DONE! Folder: %APP%
-echo  Run: %APP%\YangZai.exe
+echo  Run: %APP%\Yangzai Pixel Craft.exe
 echo ==========================================================
 goto :end
 :nopy
