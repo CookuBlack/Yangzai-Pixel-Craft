@@ -6,6 +6,22 @@
 
 ## 功能一览
 
+### **界面展示**
+
+![Snipaste_2026-09-15_11-50-40](./README.assets/Snipaste_2026-09-15_11-50-40.png)
+
+![Snipaste_2026-09-15_11-50-26](./README.assets/Snipaste_2026-09-15_11-50-26.png)
+
+![Snipaste_2026-09-15_11-50-17](./README.assets/Snipaste_2026-09-15_11-50-17.png)
+
+![Snipaste_2026-09-15_11-50-09](./README.assets/Snipaste_2026-09-15_11-50-09.png)
+
+![Snipaste_2026-09-15_11-49-58](./README.assets/Snipaste_2026-09-15_11-49-58.png)
+
+![Snipaste_2026-09-15_11-49-49](./README.assets/Snipaste_2026-09-15_11-49-49-1789444377417-3.png)
+
+### 功能说明
+
 | 功能 | 说明 |
 | --- | --- |
 | 🚀 DLSS 增强 | 视频/图片超分放大（1.5×/1.7×/2×/3×），参数可调，实时预览出图 |
